@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>恋爱纪念报告</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f0ff;
+      margin: 0;
+      padding: 20px;
+      color: #4a148c;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      position: relative;
+    }
+
+    .container {
+      max-width: 480px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #7e57c2;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    .preview {
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 12px;
+    }
+
+    .report {
+      margin-top: 30px;
+      background: #f3e5f5;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    .days {
+      font-size: 28px;
+      color: #6a1b9a;
+      font-weight: bold;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #999;
+    }
+
+    /* 背景爱心特效 */
+.heart {
+  position: absolute;
+  bottom: 100px;
+  font-size: 20px;
+  background: linear-gradient(45deg, #d39dfa, #8e24aa); /* 渐变效果 */
+  -webkit-background-clip: text; /* 背景剪切到文本 */
+  color: transparent; /* 文字透明 */
+  animation: floatHeart 3s ease-in infinite;
+}
+
+@keyframes floatHeart {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-100px) scale(1.5);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-200px) scale(1);
+    opacity: 0;
+  }
+}
+
+
+    /* 音乐控制样式 */
+    audio {
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- 第 1 页: 选择纪念日 -->
+  <div class="container" id="step1" style="display: block;">
+    <h1>🎉 选择恋爱纪念日</h1>
+    <label>📅 选择纪念日：</label>
+    <input type="date" id="startDate" value="2025-01-01">
+    <button onclick="nextStep(1)">下一步</button>
+  </div>
+
+  <!-- 第 2 页: 上传合照 -->
+  <div class="container" id="step2" style="display: none;">
+    <h1>🖼️ 上传你们的合照</h1>
+    <label>上传合照：</label>
+    <input type="file" accept="image/*" onchange="previewImage(event)">
+    <img id="preview" class="preview" style="display: none;" />
+    <button onclick="nextStep(2)">下一步</button>
+  </div>
+
+  <!-- 第 3 页: 生成报告 - 默契值 -->
+  <div class="container" id="step3" style="display: none;">
+    <h1>🎯 默契值</h1>
+    <p>默契值上升至：79%</p>
+    <button onclick="nextStep(3)">下一步</button>
+  </div>
+
+  <!-- 第 4 页: 生成报告 - 深夜谈心次数 -->
+  <div class="container" id="step4" style="display: none;">
+    <h1>🌙 深夜谈心次数</h1>
+    <p>深夜谈心次数：无法统计</p>
+    <button onclick="nextStep(4)">下一步</button>
+  </div>
+
+  <!-- 第 5 页: 生成报告 - 诊断结果 -->
+  <div class="container" id="step5" style="display: none;">
+    <h1>🧠 诊断结果</h1>
+    <p>诊断结果：轻度依赖、习惯性投喂、无条件偏心</p>
+    <button onclick="nextStep(5)">下一步</button>
+  </div>
+
+  <!-- 第 6 页: 生成报告 - 治疗建议 -->
+  <div class="container" id="step6" style="display: none;">
+    <h1>💊 治疗建议</h1>
+    <p>治疗建议：定期约会，每日三次爱你，终身不愈</p>
+    <button onclick="generateReport()">生成报告</button>
+  </div>
+
+  <!-- 最终报告页面 -->
+  <div class="container" id="finalReport" style="display: none;">
+    <h1>🎉 恋爱三周年纪念报告</h1>
+    <div class="report">
+      <h3>纪念日：</h3>
+      <p id="finalDate"></p>
+
+      <h3>上传的合照：</h3>
+      <img id="finalImage" class="preview" style="width: 100%; border-radius: 12px;" />
+
+      <h3>默契值：</h3>
+      <p>默契值上升至：79%</p>
+
+      <h3>深夜谈心次数：</h3>
+      <p>深夜谈心次数：无法统计</p>
+
+      <h3>诊断结果：</h3>
+      <p>轻度依赖、习惯性投喂、无条件偏心</p>
+
+      <h3>治疗建议：</h3>
+      <p>定期约会，每日三次爱你，终身不愈</p>
+    </div>
+    <div class="footer">— 恋爱系统认证报告 —</div>
+  </div>
+
+  <!-- 背景音乐 -->
+  <audio id="bgm" autoplay loop>
+    <source src="your-music 1.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- 爱心特效 -->
+  <div class="heart" id="heart1">❤️</div>
+  <div class="heart" id="heart2">❤️</div>
+  <div class="heart" id="heart3">❤️</div>
+  <div class="heart" id="heart4">❤️</div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 6;
+    let userImage = '';
+    let userDate = '';
+
+    // 爱心动画特效
+    function generateHearts() {
+      setInterval(function() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerText = '❤️';
+        document.body.appendChild(heart);
+
+        // 随机位置
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+
+        // 动画结束后删除爱心
+        setTimeout(() => {
+          heart.remove();
+        }, 3000);
+      }, 900); // 每0.9秒生成一个爱心
+    }
+
+    generateHearts();  // 启动爱心动画
+
+    function nextStep(step) {
+      // 确保每一步都会隐藏当前页面并显示下一页面
+      document.getElementById('step' + step).style.display = 'none';
+      currentStep++;
+
+      if (currentStep <= totalSteps) {
+        document.getElementById('step' + currentStep).style.display = 'block';
+      }
+    }
+
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById('preview');
+          img.src = e.target.result;
+          img.style.display = 'block';
+          userImage = e.target.result; // 保存用户上传的照片数据
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function generateReport() {
+      // 获取用户输入的纪念日
+      const startDate = document.getElementById('startDate').value;
+      userDate = startDate;
+
+      // 隐藏当前页面并显示最终报告
+      document.getElementById('step6').style.display = 'none';
+      document.getElementById('finalReport').style.display = 'block';
+
+      // 填充最终报告内容
+      document.getElementById('finalDate').textContent = userDate;
+      document.getElementById('finalImage').src = userImage;
+    }
+
+    // 确保背景音乐在页面加载时自动播放
+    window.onload = function() {
+      const audio = document.getElementById('bgm');
+      audio.play();
+    };
+  </script>
+
+</body>
+</html>
